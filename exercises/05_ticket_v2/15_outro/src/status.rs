@@ -8,28 +8,34 @@ pub enum Status {
     Done,
 }
 
+#[derive(thiserror::Error, Debug)]
+pub enum InvalidStatusError {
+    #[error("{0}")]
+    Invalid(String),
+}
+
 impl TryFrom<String> for Status {
-    type Error = String;
+    type Error = InvalidStatusError;
 
     fn try_from(status: String) -> Result<Self, Self::Error> {
         match status.to_lowercase().as_str() {
             "todo" => Ok(Status::ToDo),
             "inprogress" => Ok(Status::InProgress),
             "done" => Ok(Status::Done),
-            _ => Err("Err Message".to_string()),
+            s => Err(InvalidStatusError::Invalid(s.to_string())),
         }
     }
 }
 
 impl TryFrom<&str> for Status {
-    type Error = String;
+    type Error = InvalidStatusError;
 
     fn try_from(status: &str) -> Result<Self, Self::Error> {
         match status.to_lowercase().as_str() {
             "todo" => Ok(Status::ToDo),
             "inprogress" => Ok(Status::InProgress),
             "done" => Ok(Status::Done),
-            _ => Err("Err Message".to_string()),
+            s => Err(InvalidStatusError::Invalid(s.to_string())),
         }
     }
 }
