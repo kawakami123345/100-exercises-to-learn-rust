@@ -8,8 +8,6 @@ pub fn sum(slice: &'static [i32]) -> i32 {
     vec![v.0, v.1]
         .iter()
         .map(|&s| thread::spawn(move || s.iter().sum::<i32>()))
-        .collect::<Vec<_>>()
-        .into_iter()
         .map(|s| s.join().unwrap())
         .sum()
 }
